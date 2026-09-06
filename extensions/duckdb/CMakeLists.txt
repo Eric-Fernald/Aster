@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.24)
+# Built as a DuckDB loadable extension. Requires the DuckDB source tree (DUCKDB_SOURCE_DIR) and the
+# substrait extension so `get_substrait(sql)` can hand physical plans to Aster.
+find_package(DuckDB QUIET)
+if(NOT DuckDB_FOUND AND NOT DEFINED DUCKDB_SOURCE_DIR)
+  message(WARNING "DuckDB not found; skipping aster_duckdb extension")
+  return()
+endif()
+set(EXTENSION_NAME aster)
+add_library(aster_duckdb_extension SHARED aster_extension.cpp)
+set_target_properties(aster_duckdb_extension PROPERTIES OUTPUT_NAME aster PREFIX "" SUFFIX ".duckdb_extension")
+target_link_libraries(aster_duckdb_extension PRIVATE aster_core)
+if(DuckDB_FOUND)
+  target_link_libraries(aster_duckdb_extension PRIVATE duckdb)
+else()
+  target_include_directories(aster_duckdb_extension PRIVATE ${DUCKDB_SOURCE_DIR}/src/include)
+endif()
+target_compile_definitions(aster_duckdb_extension PRIVATE DUCKDB_BUILD_LOADABLE_EXTENSION)

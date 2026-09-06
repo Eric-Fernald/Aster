@@ -1,0 +1,18 @@
+{
+  "version": 6,
+  "configurePresets": [
+    { "name": "cpu", "binaryDir": "build/cpu", "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo" } },
+    { "name": "cuda", "inherits": "cpu", "binaryDir": "build/cuda",
+      "cacheVariables": { "ASTER_ENABLE_CUDA": "ON", "ASTER_ENABLE_CUDF": "ON", "ASTER_ENABLE_NVRTC": "ON", "ASTER_ENABLE_CUFILE": "ON", "ASTER_ENABLE_ARROW": "ON" } },
+    { "name": "full", "inherits": "cuda", "binaryDir": "build/full",
+      "cacheVariables": { "ASTER_ENABLE_NCCL": "ON", "ASTER_ENABLE_UCX": "ON", "ASTER_ENABLE_NVCOMP": "ON", "ASTER_ENABLE_SUBSTRAIT": "ON", "ASTER_ENABLE_DUCKDB": "ON", "ASTER_ENABLE_LZ4": "ON", "ASTER_ENABLE_ZSTD": "ON", "ASTER_ENABLE_CUVS": "ON" } }
+  ],
+  "buildPresets": [
+    { "name": "cpu", "configurePreset": "cpu" },
+    { "name": "cuda", "configurePreset": "cuda" },
+    { "name": "full", "configurePreset": "full" }
+  ],
+  "testPresets": [
+    { "name": "cpu", "configurePreset": "cpu", "output": { "outputOnFailure": true } }
+  ]
+}

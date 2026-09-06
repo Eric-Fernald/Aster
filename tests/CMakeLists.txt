@@ -1,0 +1,5 @@
+file(GLOB ASTER_TEST_SOURCES CONFIGURE_DEPENDS test_*.cpp)
+add_executable(aster_tests ${ASTER_TEST_SOURCES})
+target_link_libraries(aster_tests PRIVATE aster_core)
+target_include_directories(aster_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+add_test(NAME aster_tests COMMAND aster_tests)
